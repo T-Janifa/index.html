@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAO Collective</title>
+    <style>
+      :root {
+        --bg: #06131d;
+        --bg-2: #0d1f2e;
+        --panel: rgba(15, 25, 38, 0.9);
+        --text: #edf6ff;
+        --muted: #a7bbca;
+        --primary: #5eead4;
+        --secondary: #8b5cf6;
+        --gold: #fbbf24;
+        --border: rgba(255, 255, 255, 0.08);
+        --shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: radial-gradient(circle at top, #12314c 0%, var(--bg) 35%, #040b12 100%);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .container {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(6, 19, 29, 0.7);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 72px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: #06131d;
+        background: linear-gradient(135deg, var(--primary), #a7f3d0);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 28px;
+        color: var(--muted);
+      }
+
+      .nav-links a:hover {
+        color: var(--text);
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 14px 22px;
+        border-radius: 999px;
+        font-weight: 700;
+        transition: 0.2s ease;
+        border: 1px solid transparent;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow);
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary), #8ef1d7);
+        color: #062b36;
+      }
+
+      .btn-secondary {
+        border-color: var(--border);
+        background: rgba(255, 255, 255, 0.02);
+        color: var(--text);
+      }
+
+      .hero {
+        padding: 90px 0 70px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 42px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(94, 234, 212, 0.08);
+        color: var(--primary);
+        border: 1px solid rgba(94, 234, 212, 0.2);
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: clamp(2.8rem, 5vw, 5rem);
+        line-height: 1.05;
+        letter-spacing: -0.06em;
+        margin: 20px 0 18px;
+      }
+
+      .hero p {
+        color: var(--muted);
+        font-size: 1.08rem;
+        max-width: 640px;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 30px;
+      }
+
+      .stats {
+        display: flex;
+        gap: 28px;
+        flex-wrap: wrap;
+        margin-top: 36px;
+      }
+
+      .stats div {
+        min-width: 120px;
+      }
+
+      .stats strong {
+        display: block;
+        font-size: 1.8rem;
+        line-height: 1;
+      }
+
+      .stats span {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .dashboard {
+        padding: 22px;
+        background: linear-gradient(180deg, rgba(19, 38, 58, 0.92), rgba(7, 19, 31, 0.95));
+      }
+
+      .mini-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+
+      .dot-group {
+        display: flex;
+        gap: 8px;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+
+      .dot:nth-child(1) { background: #ff5f56; }
+      .dot:nth-child(2) { background: #ffbd2e; }
+      .dot:nth-child(3) { background: #27c93f; }
+
+      .token-box {
+        padding: 16px 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.06);
+        background: linear-gradient(135deg, rgba(94,234,212,0.08), rgba(139,92,246,0.12));
+      }
+
+      .token-box small {
+        display: block;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+
+      .balance {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 8px 0 18px;
+        gap: 12px;
+      }
+
+      .balance strong {
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        letter-spacing: -0.06em;
+      }
+
+      .pill {
+        background: rgba(251, 191, 36, 0.12);
+        color: var(--gold);
+        border: 1px solid rgba(251, 191, 36, 0.25);
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 0.72rem;
+        font-weight: 700;
+      }
+
+      .list {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .list-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255,255,255,0.04);
+        border-radius: 12px;
+        padding: 12px 14px;
+      }
+
+      .list-row span {
+        color: var(--muted);
+      }
+
+      .list-row strong {
+        font-size: 0.96rem;
+      }
+
+      section {
+        padding: 50px 0;
+      }
+
+      .section-heading {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .section-heading h2 {
+        margin: 0 0 10px;
+        font-size: clamp(2rem, 3vw, 2.8rem);
+        letter-spacing: -0.05em;
+      }
+
+      .section-heading p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .feature {
+        padding: 26px 22px;
+      }
+
+      .feature-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 18px;
+        background: linear-gradient(135deg, rgba(94,234,212,0.16), rgba(139,92,246,0.18));
+        border: 1px solid rgba(255,255,255,0.08);
+        font-size: 1.4rem;
+      }
+
+      .feature h3 {
+        margin: 0 0 10px;
+        font-size: 1.2rem;
+      }
+
+      .feature p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .cta {
+        padding: 60px 0 100px;
+      }
+
+      .cta-box {
+        text-align: center;
+        padding: 40px 24px;
+        background: linear-gradient(135deg, rgba(94,234,212,0.08), rgba(139,92,246,0.12));
+      }
+
+      .cta-box h3 {
+        margin: 0 0 12px;
+        font-size: clamp(2rem, 3vw, 3rem);
+        letter-spacing: -0.05em;
+      }
+
+      .cta-box p {
+        margin: 0 0 24px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 860px) {
+        .hero-grid,
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav-links {
+          display: none;
+        }
+
+        .hero {
+          padding-top: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container nav">
+        <div class="brand">
+          <div class="brand-mark">D</div>
+          DAO Collective
+        </div>
+
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="#about">About</a>
+          <a href="#features">Features</a>
+          <a href="#governance">Governance</a>
+          <a href="#community">Community</a>
+        </nav>
+
+        <a class="btn btn-secondary" href="#join">Join DAO</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <span class="eyebrow">On-chain governance</span>
+            <h1>Build the future together.</h1>
+            <p>
+              DAO Collective helps communities coordinate decisions, fund ideas,
+              and grow value through transparent decentralized governance.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#join">Launch Proposal</a>
+              <a class="btn btn-secondary" href="#about">Learn More</a>
+            </div>
+
+            <div class="stats">
+              <div>
+                <strong>$28.4M</strong>
+                <span>treasury</span>
+              </div>
+              <div>
+                <strong>1,240</strong>
+                <span>members</span>
+              </div>
+              <div>
+                <strong>96%</strong>
+                <span>turnout</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card dashboard" aria-label="DAO dashboard preview">
+            <div class="mini-header">
+              <span>Governance Dashboard</span>
+              <div class="dot-group" aria-hidden="true">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </div>
+            </div>
+
+            <div class="token-box">
+              <small>Community treasury</small>
+              <div class="balance">
+                <strong>245,890</strong>
+                <span class="pill">+12.8%</span>
+              </div>
+            </div>
+
+            <div class="list">
+              <div class="list-row">
+                <span>Proposal 24</span>
+                <strong>Infrastructure grant</strong>
+              </div>
+              <div class="list-row">
+                <span>Proposal 25</span>
+                <strong>Community rewards</strong>
+              </div>
+              <div class="list-row">
+                <span>Proposal 26</span>
+                <strong>Partnership expansion</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Why communities choose us</h2>
+            <p>Built for transparent coordination, funding, and shared ownership.</p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature card">
+              <div class="feature-icon">⚙️</div>
+              <h3>Smart Governance</h3>
+              <p>Set voting rules, delegation, and treasury management with secure on-chain controls.</p>
+            </article>
+
+            <article class="feature card">
+              <div class="feature-icon">💸</div>
+              <h3>Funding Pools</h3>
+              <p>Distribute grants and incentives to builders, creators, and contributors with transparency.</p>
+            </article>
+
+            <article class="feature card">
+              <div class="feature-icon">🌍</div>
+              <h3>Global Community</h3>
+              <p>Unite members from around the world around shared goals and collective action.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="about">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Transparent, democratic, and resilient</h2>
+            <p>Every decision is visible, every proposal is accountable, and every member can participate.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta" id="join">
+        <div class="container">
+          <div class="card cta-box">
+            <h3>Join the next wave of collective ownership.</h3>
+            <p>Shape the ecosystem, vote on proposals, and help steer the future of the DAO.</p>
+            <a class="btn btn-primary" href="mailto:hello@daocollective.io">Become a Member</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
